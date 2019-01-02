@@ -1,0 +1,12 @@
+.vs/
+Debug/
+*.sln
+*vcxproj*
+
+*/glm
+*/GL
+*.lib
+*.dll
+
+models/*
+/*.txt
