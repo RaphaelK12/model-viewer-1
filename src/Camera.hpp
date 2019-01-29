@@ -5,20 +5,21 @@
 
 #include "glm/glm.hpp"
 
-namespace Camera 
-{
+namespace Camera {
+
 	extern const bool DEBUG;
 
 	/********************************************************************************
 	 *                               CAMERA VARIABLES                               *
 	 ********************************************************************************/
 
-	// camera attributes (for gluLookAt)
+	/* Camera attributes for gluLookAt() */
 	extern glm::vec3 camera;
 	extern glm::vec3 target;
 	extern glm::vec3 up;
 
 	extern GLdouble near_clip, far_clip;
+
 
 	/********************************************************************************
 	 *                               CAMERA FUNCTIONS                               *
@@ -41,6 +42,7 @@ namespace Camera
 	void increaseNearClip();
 
 	void decreaseFarClip();
+
 }
 
 #endif

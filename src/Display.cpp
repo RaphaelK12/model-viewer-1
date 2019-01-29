@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <vector>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 #include "glm/glm.hpp"
@@ -77,8 +79,8 @@ namespace Display
 		glLoadIdentity();
 
 		gluLookAt(Camera::camera[0], Camera::camera[1], Camera::camera[2],
-			Camera::target[0], Camera::target[1], Camera::target[2],
-			Camera::up[0], Camera::up[1], Camera::up[2]);
+			      Camera::target[0], Camera::target[1], Camera::target[2],
+			      Camera::up[0],     Camera::up[1],     Camera::up[2]);
 
 		glColor3f(red, green, blue);
 		setPolygonMode();

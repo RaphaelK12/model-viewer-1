@@ -25,6 +25,6 @@ namespace Constants
 	extern const GLfloat mat_sp[] = { 0.3, 0.3, 0.3, 1.0 };
 	extern const GLfloat mat_sh[] = { 50.0 };
 
-	extern const bool DEBUG_MATRICES(false); // reduce framerate if used
-	extern const bool RENDER_AXES(false);
+	extern const bool DEBUG_MATRICES = false; // reduce framerate if used
+	extern const bool RENDER_AXES = false;
 }
