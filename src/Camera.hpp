@@ -18,7 +18,11 @@ namespace Camera {
 	extern glm::vec3 target;
 	extern glm::vec3 up;
 
-	extern GLdouble near_clip, far_clip;
+    extern glm::vec3 n_axis;
+    extern glm::vec3 u_axis;
+    extern glm::vec3 v_axis;
+
+	extern GLfloat near_clip, far_clip;
 
 
 	/********************************************************************************
@@ -27,13 +31,11 @@ namespace Camera {
 
 	void resetCamera();
 
+    void updateCameraAxes();
+
 	void translateCamera(char axis, bool pos);
 
 	void rotateCamera(char axis, float angle);
-
-	void printModelViewMatrix();
-
-	void printProjectionMatrix();
 
 	void calcModelViewMat();
 
@@ -42,6 +44,10 @@ namespace Camera {
 	void increaseNearClip();
 
 	void decreaseFarClip();
+
+    void printModelViewMatrix();
+
+    void printProjectionMatrix();
 
 }
 

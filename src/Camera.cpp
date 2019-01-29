@@ -32,7 +32,11 @@ namespace Camera {
     glm::vec3 target;
     glm::vec3 up;
 
-    GLdouble near_clip, far_clip;
+    glm::vec3 n_axis;
+    glm::vec3 u_axis;
+    glm::vec3 v_axis;
+
+    GLfloat near_clip, far_clip;
 
 
     /********************************************************************************
@@ -66,7 +70,7 @@ namespace Camera {
         near_clip = (camera[2] - Display::maxz) / 2;
 
         /* Include the whole model, plus some extra space */
-        far_clip = (camera[2] - Display::minz) * 1.5;
+        far_clip = (camera[2] - Display::minz) * 1.5f;
 
         if (DEBUG) {
             glm::vec3 temp(camera - target);
@@ -78,21 +82,29 @@ namespace Camera {
         }
     }
 
+    /*
+     * Calculate the current camera axes (u, v, and n) based on gluLookAt()
+     * parameters (camera position, target position, and up axis).
+     */
+    void updateCameraAxes() {
+        n_axis[0] = camera[0] - target[0];
+        n_axis[1] = camera[1] - target[1];
+        n_axis[2] = camera[2] - target[2];
+        n_axis = glm::normalize(n_axis);
+
+        u_axis = glm::cross(up, n_axis);
+        v_axis = glm::cross(n_axis, u_axis);
+    }
+
 
     /*
      * Translate the camera along its u, v, or n axis, updating both the
      * camera and target coordinates by the same amount along the given axis.
      */
     void translateCamera(char axis, bool pos) {
-        glm::vec3 n_axis(camera[0] - target[0],
-            camera[1] - target[1],
-            camera[2] - target[2]);
-        n_axis = glm::normalize(n_axis);
+        updateCameraAxes();
 
-        glm::vec3 u_axis = glm::cross(up, n_axis);
-        glm::vec3 v_axis = glm::cross(n_axis, u_axis);
-
-        glm::vec3 offset;
+        static glm::vec3 offset;
         if (axis == 'u') {
             offset = u_axis * Constants::trans_speed;
         } else if (axis == 'v') {
@@ -115,29 +127,22 @@ namespace Camera {
      * Rotates the camera by a given angle around its u, v, or n axis.
      */
     void rotateCamera(char axis, float angle) {
-        glm::vec3 n_axis(camera[0] - target[0],
-            camera[1] - target[1],
-            camera[2] - target[2]);
-        n_axis = glm::normalize(n_axis);
+        updateCameraAxes();
 
-        glm::vec3 u_axis = glm::cross(up, n_axis);
-        glm::vec3 v_axis = glm::cross(n_axis, u_axis);
-
-        glm::vec3 line_of_sight(target[0] - camera[0],
-            target[1] - camera[1],
-            target[2] - camera[2]);
+        static glm::vec3 line_of_sight;
+        line_of_sight[0] = target[0] - camera[0];
+        line_of_sight[1] = target[1] - camera[1];
+        line_of_sight[2] = target[2] - camera[2];
 
         GLfloat length = glm::length(line_of_sight);
 
         if (axis == 'u') { // look up/down
-            // rotate and scale back to proper length
             line_of_sight = glm::rotate(line_of_sight, angle, u_axis);
             line_of_sight *= length / glm::length(line_of_sight);
             target = line_of_sight + camera;
             up = glm::rotate(up, angle, u_axis);
             up = glm::normalize(up);
         } else if (axis == 'v') { // look right/left
-            // rotate and scale back to proper length
             line_of_sight = glm::rotate(line_of_sight, angle, v_axis);
             line_of_sight *= length / glm::length(line_of_sight);
             target = line_of_sight + camera;
@@ -149,67 +154,14 @@ namespace Camera {
 
 
     /* 
-     * Prints the current fixed function pipeline modelview matrix. 
-     */
-    void printModelViewMatrix() {
-        GLfloat m[16];
-        glGetFloatv(GL_MODELVIEW_MATRIX, m);
-
-        printf("OpenGL ModelView Matrix:\n");
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                printf("%.3f ", m[i + j * 4]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-
-
-    /* 
-     * Prints the current fixed function pipeline projection matrix. 
-     */
-    void printProjectionMatrix() {
-        GLfloat m[16];
-        glGetFloatv(GL_PROJECTION_MATRIX, m);
-
-        printf("OpenGL Projection Matrix:\n");
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                printf("%.3f ", m[i + j * 4]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-
-
-    /* 
      * Calculates the modelview matrix for the vertex shader. 
      */
     void calcModelViewMat() {
-        glm::vec3 n_axis(camera[0] - target[0],
-            camera[1] - target[1],
-            camera[2] - target[2]);
-        n_axis = glm::normalize(n_axis);
-
-        glm::vec3 u_axis = glm::cross(Camera::up, n_axis);
-        glm::vec3 v_axis = glm::cross(n_axis, u_axis);
+        updateCameraAxes();
 
         glm::vec3 origin(camera[0], camera[1], camera[2]);
-
-        if (Constants::DEBUG_MATRICES) {
-            printf("From calcModelViewMat:\n");
-            printf("\tu = [%.3f %.3f %.3f]\n\tv = [%.3f %.3f %.3f]\n\tn = [%.3f %.3f %.3f]\n\to = [%.3f %.3f %.3f]\n",
-                u_axis[0], u_axis[1], u_axis[2],
-                v_axis[0], v_axis[1], v_axis[2],
-                n_axis[0], n_axis[1], n_axis[2],
-                origin[0], origin[1], origin[2]);
-            printf("\n");
-        }
-
         origin = (float)(-1) * origin;
-        glm::vec3 translate(0.0f, 0.0f, 0.0f);
+        glm::vec3 translate;
         translate[0] = dot(origin, u_axis);
         translate[1] = dot(origin, v_axis);
         translate[2] = dot(origin, n_axis);
@@ -241,8 +193,8 @@ namespace Camera {
         GLfloat r =  Display::max_xy / 4;
         GLfloat b = -Display::max_xy / 4;
         GLfloat t =  Display::max_xy / 4;
-        GLdouble n = Camera::near_clip;
-        GLdouble f = Camera::far_clip;
+        GLfloat n = near_clip;
+        GLfloat f = far_clip;
 
         GLfloat *q = ShaderLoader::projectionMat;
         *q++ = 2 * n / (r - l);		*q++ = 0.0f;				*q++ = 0.0f;					*q++ = 0.0f;
@@ -282,6 +234,42 @@ namespace Camera {
         } else {
             far_clip -= Constants::clip_speed;
         }
+    }
+
+
+    /*
+    * Prints the current fixed function pipeline modelview matrix.
+    */
+    void printModelViewMatrix() {
+        GLfloat m[16];
+        glGetFloatv(GL_MODELVIEW_MATRIX, m);
+
+        printf("OpenGL ModelView Matrix:\n");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                printf("%.3f ", m[i + j * 4]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+
+
+    /*
+    * Prints the current fixed function pipeline projection matrix.
+    */
+    void printProjectionMatrix() {
+        GLfloat m[16];
+        glGetFloatv(GL_PROJECTION_MATRIX, m);
+
+        printf("OpenGL Projection Matrix:\n");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                printf("%.3f ", m[i + j * 4]);
+            }
+            printf("\n");
+        }
+        printf("\n");
     }
 
 }
