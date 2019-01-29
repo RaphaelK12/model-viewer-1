@@ -3,33 +3,35 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-namespace Constants
-{
-	// window size and position
-	extern const int window_w;
-	extern const int window_h;
+namespace Constants {
 
-	extern const int window1_x;
-	extern const int window1_y;
+    /* Window size and positions */
+    extern const int window_w;
+    extern const int window_h;
 
-	extern const int window2_x;
-	extern const int window2_y;
+    extern const int window1_x;
+    extern const int window1_y;
 
-	// various speed parameters
-	extern const GLfloat trans_speed;	// camera translation
-	extern const GLfloat rotate_speed;	// camera rotation
-	extern const GLfloat color_speed;	// color change
-	extern const GLfloat clip_speed;	// clipping value change
-	extern const double framerate;
+    extern const int window2_x;
+    extern const int window2_y;
 
-	// material properties
-	extern const GLfloat mat_am[];
-	extern const GLfloat mat_di[];
-	extern const GLfloat mat_sp[];
-	extern const GLfloat mat_sh[];
+    /* Speed parameters */
+    extern const GLfloat trans_speed;
+    extern const GLfloat rotate_speed;
+    extern const GLfloat color_speed;
+    extern const GLfloat clip_speed;
+    extern const double framerate;
 
-	extern const bool DEBUG_MATRICES;
-	extern const bool RENDER_AXES;
+    /* Material properties */
+    extern const GLfloat mat_am[];
+    extern const GLfloat mat_di[];
+    extern const GLfloat mat_sp[];
+    extern const GLfloat mat_sh[];
+
+    extern const bool DEBUG_MATRICES;
+    extern const bool RENDER_AXES;
+    extern const bool RENDER_NORMALS;
+
 }
 
 #endif

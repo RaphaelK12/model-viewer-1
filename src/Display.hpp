@@ -6,74 +6,76 @@
 #include <vector>
 #include "GL/freeglut.h"
 
-namespace Display
-{
-	/********************************************************************************
-	 *                              DISPLAY VARIABLES                               *
-	 ********************************************************************************/
+namespace Display {
 
-	extern char current_model[100];
+    /* Rendering modes */
+    #define SOLID		1
+    #define WIREFRAME	2
+    #define POINTS		3
 
-	extern std::vector<GLfloat> vertexCoords;
-	extern std::vector<GLuint> faceVertices;
-	extern std::vector<GLfloat> vertexNormals;
+    /* Lighting on/off */
+    #define OFF			0
+    #define GLOBAL_ON	1
+    #define ALL_ON		2
 
-	extern GLfloat maxx, maxy, maxz;
-	extern GLfloat minx, miny, minz;
-	extern GLfloat max_xy;
+    /********************************************************************************
+     *                              DISPLAY VARIABLES                               *
+     ********************************************************************************/
 
-	extern GLfloat red, green, blue;
+    extern char current_model[100];
 
-	extern GLfloat light_position[];
-	extern GLfloat halfVector[];
+    extern std::vector<GLfloat> vertexCoords;
+    extern std::vector<GLuint> faceVertices;
+    extern std::vector<GLfloat> vertexNormals;
 
-	extern unsigned light_on;
-	extern bool smooth_shading;
+    extern GLfloat maxx, maxy, maxz;
+    extern GLfloat minx, miny, minz;
+    extern GLfloat max_xy;
 
-	// rendering modes
-	#define SOLID		1
-	#define WIREFRAME	2
-	#define POINTS		3
+    extern GLfloat red, green, blue;
 
-	// lighting on/off
-	#define OFF			0
-	#define GLOBAL_ON	1
-	#define ALL_ON		2
+    extern GLfloat light_position[];
+    extern GLfloat halfVector[];
 
-	extern char render_mode;
-	extern GLenum primitive_type;
+    extern unsigned light_on;
+    extern bool smooth_shading;
 
-	extern int window_fixed, window_shaders; // addresses for each window
+    extern char render_mode;
+    extern GLenum primitive_type;
 
-	/********************************************************************************
-	 *                              DISPLAY FUNCTIONS                               *
-	 ********************************************************************************/
+    extern int window_fixed, window_shaders; // addresses for each window
 
-	void displayFixed();
 
-	void displayShaders();
+    /********************************************************************************
+     *                              DISPLAY FUNCTIONS                               *
+     ********************************************************************************/
 
-	void timer(int t);
+    void displayFixed();
 
-	void setPolygonMode();
+    void displayShaders();
 
-	void renderAxes();
+    void timer(int t);
 
-	void colorUp(GLfloat *color);
+    void setPolygonMode();
 
-	void colorDown(GLfloat *color);
+    void renderAxes();
 
-	void updateColorUniform();
+    void renderNormals();
 
-	void updateShadingUniform();
+    void colorUp(GLfloat *color);
 
-	void updateLightOnUniform();
+    void colorDown(GLfloat *color);
 
-	void updateHalfVector();
+    void updateColorUniform();
 
-	void reinitializeShaders();
+    void updateShadingUniform();
 
-	void renderNormals(); // for debugging
+    void updateLightOnUniform();
+
+    void updateHalfVector();
+
+    void reinitializeShaders();
+
 }
 
 void main(int argc, char **argv);
