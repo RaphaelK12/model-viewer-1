@@ -4,6 +4,7 @@
 #define DISPLAY_H
 
 #include <vector>
+
 #include "GL/freeglut.h"
 
 namespace Display {

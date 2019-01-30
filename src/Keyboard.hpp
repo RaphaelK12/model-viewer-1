@@ -3,25 +3,14 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-namespace Keyboard
-{
-	/********************************************************************************
-	 *                              KEYBOARD VARIABLES                              *
-	 ********************************************************************************/
+namespace Keyboard {
 
-	// stores current status of keys; used to handle simultaneous key presses
-	extern bool keyPressed[256];
+    extern bool keyPressed[256];
+    extern bool increase;
 
-	// toggle for increasing/decreasing color and clipping values
-	extern bool increase;
+    void keyPress(unsigned char key, int x, int y);
+    void keyRelease(unsigned char key, int x, int y);
 
-	/********************************************************************************
-	 *                              KEYBOARD FUNCTIONS                              *
-	 ********************************************************************************/
-
-	void keyPress(unsigned char key, int x, int y);
-
-	void keyRelease(unsigned char key, int x, int y);
 }
 
 #endif

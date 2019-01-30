@@ -5,28 +5,19 @@
 
 #include <list>
 
-namespace ObjectLoader
-{
-	extern const bool debug;
+namespace ObjectLoader {
 
-	extern std::vector<GLfloat> faceNormals;
-	extern std::vector<GLfloat> faceAreas;
+    extern std::vector<GLfloat> faceNormals;
+    extern std::vector<GLfloat> faceAreas;
+    extern std::vector< std::list< GLuint > > memberFaces;
+    extern const bool debug;
 
-	extern std::vector< std::list< GLuint > > memberFaces;
+    bool loadObject(char *filepath);
+    void changeModel(char *filepath);
+    void processFaces();
+    void calculateVertexNormals();
+    void printMemberFaces();
 
-	/********************************************************************************
-	 *                            OBJECT LOADER FUNCTIONS                           *
-	 ********************************************************************************/
-
-	bool loadObject(char *filepath);
-
-	void changeModel(char *filepath);
-
-	void processFaces();
-
-	void printMemberFaces();
-
-	void calculateVertexNormals();
 }
 
 #endif

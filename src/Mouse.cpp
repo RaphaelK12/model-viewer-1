@@ -2,90 +2,76 @@
 
 #include "GL/freeglut.h"
 
+#include "Camera.hpp"
 #include "Constants.hpp"
 #include "Mouse.hpp"
-#include "Camera.hpp"
 
-namespace Mouse
-{
-	/********************************************************************************
-	 *                               MOUSE VARIABLES                                *
-	 ********************************************************************************/
+namespace Mouse {
 
-	// stores current up/down status of mouse buttons (for camera tilt)
-	bool left_press = false;
-	bool right_press = false;
+    /* Stores current up/down status of mouse buttons; used to control camera tilt */
+    bool left_press = false;
+    bool right_press = false;
 
-	/********************************************************************************
-  	 *                               MOUSE FUNCTIONS                                *
-	 ********************************************************************************/
 
-	/* Handles all mouse click/scroll events; left/right clicks tilt the camera
-	* (rotation around the n axis); scrolls zoom the camera (translation along the
-	* n axis).
-	*/
-	void mouseButton(int button, int state, int x, int y)
-	{
-		if (button == GLUT_LEFT_BUTTON)
-		{
-			// tilt CCW
-			if (state == GLUT_UP) left_press = false;
-			else left_press = true;
-		}
-		if (button == GLUT_RIGHT_BUTTON)
-		{
-			// til CW
-			if (state == GLUT_UP) right_press = false;
-			else right_press = true;
-		}
+    /* 
+     * Handles all mouse click and scroll events. 
+     *
+     * Left/right clicks tilt the camera (rotation around the n axis).
+     * Scrolls zoom the camera (translation along the n axis).
+     */
+    void mouseButton(int button, int state, int x, int y) {
+        /* Tilts camera CCW */
+        if (button == GLUT_LEFT_BUTTON) {
+            if (state == GLUT_UP) left_press = false;
+            else left_press = true;
+        }
+        
+        /* Tilts camera CW */
+        if (button == GLUT_RIGHT_BUTTON) {
+            if (state == GLUT_UP) right_press = false;
+            else right_press = true;
+        }
 
-		if (state == GLUT_UP) return; // disregard GLUT_UP events for scrolls
+        if (state == GLUT_UP) return; // disregard GLUT_UP events for scrolls
 
-		// translate camera along n axis; handled in same way as u/v axis translation
-		if (button == 3)
-		{
-			// zoom in
-			Camera::translateCamera('n', false);
-		}
-		else if (button == 4)
-		{
-			// zoom out
-			Camera::translateCamera('n', true);
-		}
-	}
+        /* Scrolls translate camera along n axis */
+        if (button == 3) {
+            // Zoom in
+            Camera::translateCamera('n', false);
+        } else if (button == 4) {
+            // Zoom out
+            Camera::translateCamera('n', true);
+        }
+    }
 
-	/* Called whenver the mouse is moved; calculates the cursor's relative position
-	* to the center of the window, then calls camera rotation functions accordingly.
-	* Resets the cursor to the center of the window after each call.
-	*/
-	void mouseMove(int x, int y)
-	{
-		int originx = Constants::window_w / 2;
-		int originy = Constants::window_h / 2;
 
-		if ((x == originx) && (y = originy)) return;
+    /* 
+     * Calculates the cursor's relative position to the center of the window, then 
+     * calls camera rotation functions accordingly. Resets the cursor to the center 
+     * of the window after each call.
+     */
+    void mouseMove(int x, int y) {
+        int originx = Constants::window_w / 2;
+        int originy = Constants::window_h / 2;
 
-		int deltax = x - originx; // positive if right drag, negative if left
-		int deltay = originy - y; // positive if up drag, negative if down
+        if ((x == originx) && (y = originy)) return;
 
-		if (deltax > 1) // mouse moved right
-		{
-			Camera::rotateCamera('v', -Constants::rotate_speed);
-		}
-		else if (deltax < -1) // mouse moved left
-		{
-			Camera::rotateCamera('v', Constants::rotate_speed);
-		}
+        int deltax = x - originx; // positive if right drag, negative if left
+        int deltay = originy - y; // positive if up drag, negative if down
 
-		if (deltay > 1) // mouse moved up
-		{
-			Camera::rotateCamera('u', Constants::rotate_speed);
-		}
-		else if (deltay < -1) // mouse moved down
-		{
-			Camera::rotateCamera('u', -Constants::rotate_speed);
-		}
+        if (deltax > 1) {
+            Camera::rotateCamera('v', -Constants::rotate_speed); // mouse moved right
+        } else if (deltax < -1) {
+            Camera::rotateCamera('v', Constants::rotate_speed); // mouse moved left
+        }
 
-		glutWarpPointer(Constants::window_w / 2, Constants::window_h / 2);
-	}
+        if (deltay > 1) {
+            Camera::rotateCamera('u', Constants::rotate_speed); // mouse moved up
+        } else if (deltay < -1) {
+            Camera::rotateCamera('u', -Constants::rotate_speed); // mouse moved down
+        }
+
+        glutWarpPointer(Constants::window_w / 2, Constants::window_h / 2);
+    }
+
 }
