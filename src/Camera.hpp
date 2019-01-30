@@ -7,13 +7,6 @@
 
 namespace Camera {
 
-	extern const bool DEBUG;
-
-	/********************************************************************************
-	 *                               CAMERA VARIABLES                               *
-	 ********************************************************************************/
-
-	/* Camera attributes for gluLookAt() */
 	extern glm::vec3 camera;
 	extern glm::vec3 target;
 	extern glm::vec3 up;
@@ -24,29 +17,18 @@ namespace Camera {
 
 	extern GLfloat near_clip, far_clip;
 
+    extern const bool DEBUG;
 
-	/********************************************************************************
-	 *                               CAMERA FUNCTIONS                               *
-	 ********************************************************************************/
 
 	void resetCamera();
-
     void updateCameraAxes();
-
 	void translateCamera(char axis, bool pos);
-
 	void rotateCamera(char axis, float angle);
-
 	void calcModelViewMat();
-
 	void calcProjectionMat();
-
 	void increaseNearClip();
-
 	void decreaseFarClip();
-
     void printModelViewMatrix();
-
     void printProjectionMatrix();
 
 }

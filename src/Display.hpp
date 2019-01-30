@@ -19,10 +19,6 @@ namespace Display {
     #define GLOBAL_ON	1
     #define ALL_ON		2
 
-    /********************************************************************************
-     *                              DISPLAY VARIABLES                               *
-     ********************************************************************************/
-
     extern char current_model[100];
 
     extern std::vector<GLfloat> vertexCoords;
@@ -44,37 +40,21 @@ namespace Display {
     extern char render_mode;
     extern GLenum primitive_type;
 
-    extern int window_fixed, window_shaders; // addresses for each window
+    extern int window_fixed, window_shaders;
 
-
-    /********************************************************************************
-     *                              DISPLAY FUNCTIONS                               *
-     ********************************************************************************/
 
     void displayFixed();
-
     void displayShaders();
-
     void timer(int t);
-
     void setPolygonMode();
-
     void renderAxes();
-
     void renderNormals();
-
     void colorUp(GLfloat *color);
-
     void colorDown(GLfloat *color);
-
     void updateColorUniform();
-
     void updateShadingUniform();
-
     void updateLightOnUniform();
-
     void updateHalfVector();
-
     void reinitializeShaders();
 
 }
